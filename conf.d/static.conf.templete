@@ -1,5 +1,5 @@
 server {
-    listen 443 ssl fastopen=1024; # server
+    listen 443 ssl; # server
     # listen 443 quic; # server
 
     server_name skymkmk.com; # server

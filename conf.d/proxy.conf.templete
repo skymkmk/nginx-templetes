@@ -1,5 +1,5 @@
 server {
-    listen 443 ssl fastopen=1024; # server
+    listen 443 ssl; # server
     # listen 443 quic; # server
 
     server_name skymkmk.com; # server
@@ -20,7 +20,6 @@ server {
     # proxy_intercept_errors on; # http, server, location
     # proxy_redirect redirect replacement; # http, server, location
     # proxy_set_header field value; # http, server, location
-    proxy_set_header Early-Data $ssl_early_data;
     location / {
         proxy_pass localhost; # location, if in location, limit_except
         # 对于 WebSocket
