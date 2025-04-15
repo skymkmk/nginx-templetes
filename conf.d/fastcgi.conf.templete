@@ -2,9 +2,10 @@ server {
     listen 443 ssl; # server
     # listen 443 quic; # server
 
-    server_name skymkmk.com; # server
+    server_name example.net; # server
 
     include cert/cert.conf;
+    access_log /var/log/nginx/example.net/access.log combined gzip=5; # http, server, location, if in location, limit_except
     # auth_delay 5s; # http, server, location
     # 延迟处理未经授权的请求，使用 401 响应代码以防止在通过密码、子请求的结果或 JWT 限制访问时发生时间攻击。
 
