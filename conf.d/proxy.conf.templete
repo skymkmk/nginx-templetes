@@ -22,10 +22,16 @@ server {
     # proxy_redirect redirect replacement; # http, server, location
     # proxy_set_header field value; # http, server, location
     location / {
-        proxy_pass localhost; # location, if in location, limit_except
+        proxy_pass http://127.0.0.1:; # location, if in location, limit_except
         # 对于 WebSocket
         # proxy_http_version 1.1;
         # proxy_set_header Upgrade $http_upgrade;
         # proxy_set_header Connection "upgrade";
+        # proxy_set_header 只有在本级没有定义过时，才会从上级继承。建议不使用继承法。
+        proxy_set_header Host $host:$proxy_port;
+        proxy_set_header Forwarded "for=$proxy_add_x_forwarded_for; host=$host:$proxy_port; proto=$scheme";
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Host $host:$proxy_port;
+        proxy_set_header X-Forwarded-Proto $scheme;
     }
 }

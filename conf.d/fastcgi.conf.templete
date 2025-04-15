@@ -36,7 +36,7 @@ server {
     fastcgi_param CONTENT_TYPE $content_type;
     fastcgi_param CONTENT_LENGTH $content_length;
     location / {
-        fastcgi_pass localhost:9000; # location, if in location
+        fastcgi_pass http://127.0.0.1:; # location, if in location
         # fastcgi_pass unix:/tmp/fastcgi.socket;
     }
 }
