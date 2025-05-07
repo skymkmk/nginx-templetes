@@ -1,6 +1,7 @@
 server {
     listen 443 ssl; # server
     # listen 443 quic; # server
+    add_header Strict-Transport-Security "max-age=63072000" always;
     # add_header Alt-Svc 'h3=":443"; ma=86400';
 
     server_name example.net; # server
@@ -29,6 +30,7 @@ server {
         # proxy_set_header Upgrade $http_upgrade;
         # proxy_set_header Connection "upgrade";
         # proxy_set_header 只有在本级没有定义过时，才会从上级继承。建议不使用继承法。
+        proxy_set_header Early-Data $ssl_early_data;
         proxy_set_header Host $host:$proxy_port;
         proxy_set_header Forwarded "for=$proxy_add_x_forwarded_for; host=$host:$proxy_port; proto=$scheme";
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
