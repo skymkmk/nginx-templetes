@@ -1,6 +1,6 @@
 server {
-    listen 443 ssl; # server
-    # listen 443 quic; # server
+    listen [::]:443 ssl; # server
+    # listen [::]:443 quic; # server
     add_header Strict-Transport-Security "max-age=63072000" always;
     # add_header Alt-Svc 'h3=":443"; ma=86400';
 
@@ -16,25 +16,23 @@ server {
 
     # keepalive_timeout timeout [header_timeout]; # http, server, location
     # add_header name value [always]; # http, server, location, if in location
-    # proxy_connect_timeout 75s; # http, server, location
-    # proxy_hide_header field; # http, server, location
-    # proxy_pass_header field; # http, server, location
-    # proxy_ignore_headers field ...; # http, server, location
-    # proxy_intercept_errors on; # http, server, location
-    # proxy_redirect redirect replacement; # http, server, location
+    ####### 反向代理相关设置 ########
+    # proxy_read_timeout 60s; # http, server, location
+    # proxy_send_timeout 60s; # http, server, location
     # proxy_set_header field value; # http, server, location
+    ######### WebSocket ##########
+    # proxy_http_version 1.1;
+    # proxy_set_header Upgrade $http_upgrade;
+    # proxy_set_header Connection "upgrade";
+    ##############################
+    proxy_set_header Early-Data $ssl_early_data;
+    proxy_set_header Host $host:$proxy_port;
+    proxy_set_header Forwarded "for=$proxy_add_x_forwarded_for;host=$host:$proxy_port; proto=$scheme";
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Host $host:$proxy_port;
+    proxy_set_header X-Forwarded-Proto $scheme;
     location / {
         proxy_pass http://127.0.0.1:; # location, if in location, limit_except
-        # 对于 WebSocket
-        # proxy_http_version 1.1;
-        # proxy_set_header Upgrade $http_upgrade;
-        # proxy_set_header Connection "upgrade";
-        # proxy_set_header 只有在本级没有定义过时，才会从上级继承。建议不使用继承法。
-        proxy_set_header Early-Data $ssl_early_data;
-        proxy_set_header Host $host:$proxy_port;
-        proxy_set_header Forwarded "for=$proxy_add_x_forwarded_for; host=$host:$proxy_port; proto=$scheme";
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Host $host:$proxy_port;
-        proxy_set_header X-Forwarded-Proto $scheme;
     }
 }
