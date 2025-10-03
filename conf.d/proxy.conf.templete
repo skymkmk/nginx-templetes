@@ -1,19 +1,14 @@
 server {
-    listen [::]:443 ssl; # server
-    listen [::]:443 quic; # server
-    add_header Strict-Transport-Security "max-age=63072000" always;
-    add_header Alt-Svc 'h3=":443"; ma=63072000';
-
+    include universal.conf;
     server_name example.net; # server
-
     include cert/cert.conf;
     access_log /var/log/nginx/example.net.log combined; # http, server, location, if in location, limit_except
+
     # auth_delay 5s; # http, server, location
     # 延迟处理未经授权的请求，使用 401 响应代码以防止在通过密码、子请求的结果或 JWT 限制访问时发生时间攻击。
 
     # client_max_body_size 100M; # http, server, location
     # 设置客户端请求体的最大允许大小。对于大文件上传很有用。
-
     # keepalive_timeout timeout [header_timeout]; # http, server, location
     # add_header name value [always]; # http, server, location, if in location
     ####### 反向代理相关设置 ########
@@ -25,13 +20,7 @@ server {
     # proxy_set_header Upgrade $http_upgrade;
     # proxy_set_header Connection "upgrade";
     ##############################
-    proxy_set_header Early-Data $ssl_early_data;
-    proxy_set_header Host $host:$proxy_port;
-    proxy_set_header Forwarded "for=$proxy_add_x_forwarded_for;host=$host:$proxy_port; proto=$scheme";
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Host $host:$proxy_port;
-    proxy_set_header X-Forwarded-Proto $scheme;
+    include reverse.conf;
     location / {
         proxy_pass http://127.0.0.1:; # location, if in location, limit_except
     }

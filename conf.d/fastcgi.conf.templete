@@ -1,11 +1,6 @@
 server {
-    listen [::]:443 ssl; # server
-    listen [::]:443 quic; # server
-    add_header Strict-Transport-Security "max-age=63072000" always;
-    add_header Alt-Svc 'h3=":443"; ma=63072000';
-
+    include universal.conf;
     server_name example.net; # server
-
     include cert/cert.conf;
     access_log /var/log/nginx/example.net.log combined; # http, server, location, if in location, limit_except
     # auth_delay 5s; # http, server, location
