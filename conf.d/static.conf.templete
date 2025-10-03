@@ -1,13 +1,13 @@
 server {
     listen [::]:443 ssl; # server
-    # listen [::]:443 quic; # server
+    listen [::]:443 quic; # server
     add_header Strict-Transport-Security "max-age=63072000" always;
-    # add_header Alt-Svc 'h3=":443"; ma=86400';
+    add_header Alt-Svc 'h3=":443"; ma=63072000';
 
     server_name example.net; # server
 
     include cert/cert.conf;
-    access_log /var/log/nginx/example.net/access.log combined; # http, server, location, if in location, limit_except
+    access_log /var/log/nginx/example.net.log combined; # http, server, location, if in location, limit_except
     # aio on; # http, server, location. 用于异步读取文件，在读取大文件时有所裨益。Linux 上需搭配 directio，否则读取是阻塞的。directio 只能用于读取对齐在 512 字节边界（或 4K 对于 XFS）的块。文件未对齐的末尾以阻塞模式读取。
     # directio 4m; # http, server, location
     # sendfile off; # http, server, location, if in location
