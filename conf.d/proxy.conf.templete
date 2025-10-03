@@ -16,9 +16,7 @@ server {
     # proxy_send_timeout 60s; # http, server, location
     # proxy_set_header field value; # http, server, location
     ######### WebSocket ##########
-    # proxy_http_version 1.1;
-    # proxy_set_header Upgrade $http_upgrade;
-    # proxy_set_header Connection "upgrade";
+    # include ws.conf;
     ##############################
     include reverse.conf;
     location / {
