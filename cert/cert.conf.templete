@@ -1,2 +1,3 @@
 ssl_certificate file; # http, server
 ssl_certificate_key file; # http, server
+ssl_stapling_file file;
