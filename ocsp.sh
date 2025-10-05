@@ -28,3 +28,4 @@ if [ $EXIT_STATUS -ne 0 ]; then
 fi
 
 mv $TMP_RESP_FILE "${BASE}/ocsp"
+sudo service nginx reload
