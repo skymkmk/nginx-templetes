@@ -1,7 +1,7 @@
-import extract_ips from "./extractIps.js";
+import extractIPs from "./extract-ips.js";
 
 export default function xff(r) {
-    const ips = extract_ips(r);
+    const ips = extractIPs(r);
     const xff = ips.join(",");
     return xff;
 }
