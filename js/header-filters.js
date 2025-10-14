@@ -41,9 +41,33 @@ function varyFilter(r) {
  * 
  * @param {NginxHTTPRequest} r 
  */
+function cspFilter(r) {
+    let upstreamCSP = r.headersOut["Content-Security-Policy"];
+    if (upstreamCSP && Array.isArray(upstreamCSP)) {
+        upstreamCSP = upstreamCSP[0];
+    }
+    if (upstreamCSP) {
+        let csps = upstreamCSP.split(';').map(v => v.trim()).filter(Boolean).filter(v => !/^(?:frame-ancestors|form-action)/i.test(v));
+        csps.push("frame-ancestors 'self'");
+        csps.push("form-action 'self'");
+        if (!csps.some(v => v.toLowerCase().startsWith("object-src"))) csps.push("object-src 'none'");
+        if (!csps.some(v => v.toLowerCase().startsWith("base-uri"))) csps.push("base-uri 'self'");
+        if (!csps.some(v => v.toLowerCase().startsWith("upgrade-insecure-requests"))) csps.push("upgrade-insecure-requests");
+        let finalCSPs = csps.join("; ");
+        r.headersOut["Content-Security-Policy"] = finalCSPs;
+    } else {
+        r.headersOut["Content-Security-Policy"] = "object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests";
+    }
+}
+
+/**
+ * 
+ * @param {NginxHTTPRequest} r 
+ */
 function universalFilter(r) {
     varyFilter(r);
     cookieFilter(r);
+    cspFilter(r);
 }
 
-export default { cookieFilter, varyFilter, universalFilter };
+export default { universalFilter };
