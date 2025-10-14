@@ -19,9 +19,9 @@ server {
     ######### WebSocket ##########
     # include ws.conf;
     ##############################
-    include reverse.conf;
     location / {
         include universal.conf;
+        include reverse.conf;
         proxy_pass http://127.0.0.1:; # location, if in location, limit_except
     }
 }
