@@ -21,4 +21,16 @@ function cookieFilter(r) {
     r.headersOut['Set-Cookie'] = cookies;
 }
 
-export default { cookieFilter };
+/**
+ * 
+ * @param {NginxHTTPRequest} r 
+ */
+function varyFilter(r) {
+    const vary = r.headersOut["Vary"];
+    if (vary) {
+        if (vary.toLowerCase().includes("accept-encoding")) return;
+    }
+    r.headersOut["Vary"] = vary.concat("Accept-Encoding");
+}
+
+export default { cookieFilter, varyFilter };
