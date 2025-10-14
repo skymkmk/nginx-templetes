@@ -27,10 +27,14 @@ function cookieFilter(r) {
  */
 function varyFilter(r) {
     const vary = r.headersOut["Vary"];
+    /** @type {string | undefined} */
+    let modifiedVary;
     if (vary) {
         if (vary.toLowerCase().includes("accept-encoding")) return;
-    }
-    r.headersOut["Vary"] = vary.concat("Accept-Encoding");
+        if (vary.includes("*")) return;
+        modifiedVary = vary.split(',').map(v => v.trim()).concat("Accept-Encoding").join(", ");
+    } else modifiedVary = "Accept-Encoding";
+    r.headersOut["Vary"] = modifiedVary;
 }
 
 export default { cookieFilter, varyFilter };
