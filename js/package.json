@@ -1,0 +1,11 @@
+{
+  "name": "js",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest",
+    "njs-types": "^0.9.1"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

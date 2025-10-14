@@ -1,6 +1,13 @@
+/// <reference types="njs-types/ngx_http_js_module.d.ts" />
+
 const splitForwarded = /for\s*=\s*(?:"\[)?([0-9a-f\.:]+)/ig;
 const splitXFF = /[0-9a-f\.:]+/ig;
 
+/**
+ * 
+ * @param {NginxHTTPRequest} r 
+ * @returns {string}
+ */
 function forwardedFor(r) {
     const ips = extractIPs(r);
     const forwardedFor = ips.map(v => {
@@ -13,15 +20,26 @@ function forwardedFor(r) {
     return forwardedFor;
 }
 
+/**
+ * 
+ * @param {NginxHTTPRequest} r 
+ * @returns {string}
+ */
 function xff(r) {
     const ips = extractIPs(r);
     const xff = ips.join(",");
     return xff;
 }
 
+/**
+ * 
+ * @param {NginxHTTPRequest} r 
+ * @returns {string[]}
+ */
 function extractIPs(r) {
     const remoteAddr = r.remoteAddress;
     const rawForwarded = r.headersIn["Forwarded"];
+    /** @type {string[]} */
     let ips = [];
     if (rawForwarded) {
         let match;
@@ -41,6 +59,11 @@ function extractIPs(r) {
     return ips;
 }
 
+/**
+ * 
+ * @param {string} ip
+ * @returns {boolean}
+ */
 function isValidIPv4(ip) {
     const parts = ip.split('.');
     if (parts.length !== 4) {
@@ -66,6 +89,11 @@ function isValidIPv4(ip) {
     return true;
 }
 
+/**
+ * 
+ * @param {string} ip
+ * @returns {boolean}
+ */
 function isValidIPv6(ip) {
     if (ip.includes('%')) {
         const zoneParts = ip.split('%');
@@ -104,6 +132,7 @@ function isValidIPv6(ip) {
         }
     }
 
+    /** @type {string[]} */
     let parts = [];
     const compressedParts = ip.split('::');
     for (let i = 0; i < compressedParts.length; i++) {
@@ -128,6 +157,11 @@ function isValidIPv6(ip) {
     return true;
 }
 
+/**
+ * 
+ * @param {string} ip
+ * @returns {boolean}
+ */
 function isValidIP(ip) {
     if (typeof ip !== 'string' || ip.length === 0) {
         return false;
