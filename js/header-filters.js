@@ -64,7 +64,20 @@ function cspFilter(r) {
  * 
  * @param {NginxHTTPRequest} r 
  */
+function commonHeaderFilter(r) {
+    r.headersOut["Strict-Transport-Security"] = "max-age=63072000; includeSubDomains";
+    r.headersOut["Alt-Svc"] = 'h3=":443", h2=":443"; ma=63072000; persist=1';
+    if (!r.headersOut["X-Content-Type-Options"]) r.headersOut["X-Content-Type-Options"] = "nosniff";
+    if (!r.headersOut["Cross-Origin-Resource-Policy"]) r.headersOut["Cross-Origin-Resource-Policy"] = "same-site";
+    if (!r.headersOut["Referrer-Policy"]) r.headersOut["Referrer-Policy"] = "strict-origin-when-cross-origin";
+}
+
+/**
+ * 
+ * @param {NginxHTTPRequest} r 
+ */
 function universalFilter(r) {
+    commonHeaderFilter(r);
     varyFilter(r);
     cookieFilter(r);
     cspFilter(r);
