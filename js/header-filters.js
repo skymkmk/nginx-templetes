@@ -37,4 +37,13 @@ function varyFilter(r) {
     r.headersOut["Vary"] = modifiedVary;
 }
 
-export default { cookieFilter, varyFilter };
+/**
+ * 
+ * @param {NginxHTTPRequest} r 
+ */
+function universalFilter(r) {
+    varyFilter(r);
+    cookieFilter(r);
+}
+
+export default { cookieFilter, varyFilter, universalFilter };

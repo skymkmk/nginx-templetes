@@ -20,6 +20,8 @@ server {
     ##############################
     include reverse.conf;
     location / {
+        js_import headerFilters from js/header-filters.js;
+        js_header_filter headerFilters.universalFilter;
         proxy_pass http://127.0.0.1:; # location, if in location, limit_except
     }
 }
