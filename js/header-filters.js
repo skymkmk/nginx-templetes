@@ -10,15 +10,15 @@
 function cookieFilter(r) {
     let cookies = r.headersOut['Set-Cookie'];
     if (!cookies) return;
-    for (let i = 0; i < cookies.length; i++) {
-        if (!cookies[i].toLowerCase().includes("samesite")) {
-            cookies[i] = cookies[i].split(';').map(v => v.trim()).filter(Boolean).concat("SameSite=Lax").join("; ");
+    r.headersOut['Set-Cookie'] = cookies.map(v => {
+        if (!v.toLowerCase().includes("samesite") || !v.toLowerCase().includes("secure")) {
+            let modifiedCookie = v.split(';').map(v => v.trim()).filter(Boolean);
+            if (!modifiedCookie.some(v => v.toLowerCase().startsWith("samesite"))) modifiedCookie.push("SameSite=Lax");
+            if (!modifiedCookie.some(v => v.toLowerCase().startsWith("secure"))) modifiedCookie.push("Secure");
+            return modifiedCookie.join("; ");
         }
-        if (!cookies[i].toLowerCase().includes("secure")) {
-            cookies[i] = cookies[i].split(';').map(v => v.trim()).filter(Boolean).concat("Secure").join("; ");
-        }
-    }
-    r.headersOut['Set-Cookie'] = cookies;
+        return v;
+    });
 }
 
 /**
