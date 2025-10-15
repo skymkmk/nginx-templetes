@@ -12,10 +12,10 @@ function cookieFilter(r) {
     if (!cookies) return;
     for (let i = 0; i < cookies.length; i++) {
         if (!cookies[i].toLowerCase().includes("samesite")) {
-            cookies[i] = cookies[i].concat("; SameSite=Lax");
+            cookies[i] = cookies[i].split(';').map(v => v.trim()).filter(Boolean).concat("SameSite=Lax").join("; ");
         }
         if (!cookies[i].toLowerCase().includes("secure")) {
-            cookies[i] = cookies[i].concat("; Secure");
+            cookies[i] = cookies[i].split(';').map(v => v.trim()).filter(Boolean).concat("Secure").join("; ");
         }
     }
     r.headersOut['Set-Cookie'] = cookies;
