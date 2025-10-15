@@ -1,27 +1,21 @@
 server {
-    listen [::]:443 ssl; # server
-    listen [::]:443 quic; # server
-    server_name example.net; # server
+    listen [::]:443 ssl;
+    listen [::]:443 quic;
+    server_name example.net;
     include cert/cert.conf;
-    access_log /var/log/nginx/example.net.log combined; # http, server, location, if in location, limit_except
+    access_log /var/log/nginx/example.net.log combined;
 
-    # auth_delay 5s; # http, server, location
-    # 延迟处理未经授权的请求，使用 401 响应代码以防止在通过密码、子请求的结果或 JWT 限制访问时发生时间攻击。
-
-    # client_max_body_size 100M; # http, server, location
-    # 设置客户端请求体的最大允许大小。对于大文件上传很有用。
-    # keepalive_timeout timeout [header_timeout]; # http, server, location
-    # add_header name value [always]; # http, server, location, if in location
+    # client_max_body_size 100M;
     ####### 反向代理相关设置 ########
-    # proxy_read_timeout 60s; # http, server, location
-    # proxy_send_timeout 60s; # http, server, location
-    # proxy_set_header field value; # http, server, location
-    ######### WebSocket ##########
-    # include ws.conf;
+    # proxy_read_timeout 60s;
+    # proxy_send_timeout 60s;
     ##############################
     location / {
+        ######### WebSocket ##########
+        # include ws.conf;
+        ##############################
         include universal.conf;
         include reverse.conf;
-        proxy_pass http://127.0.0.1:; # location, if in location, limit_except
+        proxy_pass http://127.0.0.1:;
     }
 }

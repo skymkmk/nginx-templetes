@@ -1,17 +1,15 @@
 server {
-    listen [::]:443 ssl; # server
-    listen [::]:443 quic; # server
-    server_name example.net; # server
+    listen [::]:443 ssl;
+    listen [::]:443 quic;
+    server_name example.net;
     include cert/cert.conf;
-    access_log /var/log/nginx/example.net.log combined; # http, server, location, if in location, limit_except
-    # aio on; # http, server, location. 用于异步读取文件，在读取大文件时有所裨益。Linux 上需搭配 directio，否则读取是阻塞的。directio 只能用于读取对齐在 512 字节边界（或 4K 对于 XFS）的块。文件未对齐的末尾以阻塞模式读取。
-    # directio 4m; # http, server, location
-    # sendfile off; # http, server, location, if in location
-    # 对于有读取文件的场景，sendfile 适合小文件，aio 适合大文件或随机读取。应当择一开启。
+    access_log /var/log/nginx/example.net.log combined;
+
+    # client_max_body_size 100M;
 
     location / {
         include universal.conf;
-        root /path/to/root; # http, server, location, if in location
+        root /path/to/root;
         # 通过仅仅将 URI 添加到 root 指令的值来构造文件的路径。如果需要修改 URI，则应使用 alias 指令。
         # index file ...; # http, server, location
     }
