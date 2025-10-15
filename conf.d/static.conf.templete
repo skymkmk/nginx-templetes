@@ -1,6 +1,5 @@
 server {
-    listen [::]:443 ssl;
-    listen [::]:443 quic;
+    include universal-server.conf;
     server_name example.net;
     include cert/cert.conf;
     access_log /var/log/nginx/example.net.log combined;
@@ -8,7 +7,7 @@ server {
     # client_max_body_size 100M;
 
     location / {
-        include universal.conf;
+        include universal-location.conf;
         root /path/to/root;
         # 通过仅仅将 URI 添加到 root 指令的值来构造文件的路径。如果需要修改 URI，则应使用 alias 指令。
         # index file ...; # http, server, location

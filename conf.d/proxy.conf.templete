@@ -1,6 +1,5 @@
 server {
-    listen [::]:443 ssl;
-    listen [::]:443 quic;
+    include universal-server.conf;
     server_name example.net;
     include cert/cert.conf;
     access_log /var/log/nginx/example.net.log combined;
@@ -14,7 +13,7 @@ server {
         ######### WebSocket ##########
         # include ws.conf;
         ##############################
-        include universal.conf;
+        include universal-location.conf;
         include reverse.conf;
         proxy_pass http://127.0.0.1:;
     }
