@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1 GiB 测速结果</title>
+    <style>
+        body {
+            font-size: 12pt;
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid black;
+            text-align: center;
+        }
+
+        th,
+        td {
+            padding: 0.5em;
+        }
+
+        .footnote {
+            font-size: 9pt;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <h1>1 GiB 测速结果</h1>
+        <p>LFN:
+            <code>tc qdisc replace dev lo root netem delay 150ms 20ms distribution normal loss gemodel 0.04% 20% reorder 0.25% 25% rate 200Mbit seed 18281828459045235360</code>
+        </p>
+        <p>WAN:
+            <code>tc qdisc replace dev lo root netem delay 30ms 5ms distribution normal loss gemodel 0.04% 20% reorder 0.25% 25% rate 200Mbit seed 18281828459045235360</code>
+        </p>
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th colspan="2">HTTP/3 (NGINX 1.28)</th>
+                    <th colspan="2">HTTP/3 (Caddy 2.10)</th>
+                    <th colspan="2">HTTP/2 (BBR)</th>
+                    <th colspan="2">HTTP/2 (CUBIC)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td rowspan="5">LFN</td>
+                    <td rowspan="2">测试一：5.06 MB/s</td>
+                    <td rowspan="5">平均：4.65 MB/s</td>
+                    <td colspan="2" rowspan="5">337 kB/s（十分钟测速结果，经重复三分钟测速验证量级正确）</td>
+                    <td>测试一：7.65 MB/s</td>
+                    <td rowspan="5">平均：7.26 MB/s</td>
+                    <td rowspan="2">测试一：6.97 MB/s</td>
+                    <td rowspan="5">平均：7.14 MB/s</td>
+                </tr>
+                <tr>
+                    <td>测试二：2.67 MB/s（作废）</td>
+                </tr>
+                <tr>
+                    <td>测试二：4.75 MB/s</td>
+                    <td>测试三：3.53 MB/s（作废）</td>
+                    <td>测试二：7 MB/s</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">测试三：4.13 MB/s</td>
+                    <td>测试四：7.02 MB/s</td>
+                    <td rowspan="2">测试三：7.45 MB/s</td>
+
+                </tr>
+                <tr>
+                    <td>测试五：7.12 MB/s</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">WAN</td>
+                    <td>测试一：12.5 MB/s</td>
+                    <td rowspan="4">平均：10.16 MB/s</td>
+                    <td>测试一：1.62 MB/s</td>
+                    <td rowspan="4">平均：1.64 MB/s</td>
+                    <td>测试一：21.2 MB/s</td>
+                    <td rowspan="4">平均：21.8 MB/s</td>
+                    <td>测试一：5.64 MB/s（作废）</td>
+                    <td rowspan="4">平均：17.27 MB/s</td>
+                </tr>
+                <tr>
+                    <td>测试二：9.9 MB/s</td>
+                    <td>测试二：1.62 MB/s</td>
+                    <td>测试二：21.9 MB/s</td>
+                    <td>测试二：17.2 MB/s</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">测试三：8.09 MB/s</td>
+                    <td rowspan="2">测试三：1.64 MB/s</td>
+                    <td rowspan="2">测试三：22.3 MB/s</td>
+                    <td>测试三：16.9 MB/s</td>
+                </tr>
+                <tr>
+                    <td>测试四：17.7 MB/s</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="footnote">* 已经按照 <code>quic-go</code> 建议，增大了内核缓冲区。</p>
+    </main>
+</body>
+
+</html>
